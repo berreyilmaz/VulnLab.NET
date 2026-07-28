@@ -1,0 +1,169 @@
+@model List<VulnLab.NET.Models.LabUser>?
+
+@{
+    ViewData["Title"] = "SQL Injection Lab";
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 01 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">SQL Injection</h1>
+            <p class="lead mb-2">
+                Bu lab'de önce zafiyeti sömürecek, sonra güvenli kodla kapatacağız.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Beginner</span>
+                <span class="chip">Burp Suite</span>
+                <span class="chip">Secure Coding</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Dön</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">Lab Senaryosu</h2>
+                <p class="text-muted mb-3">
+                    Aşağıdaki giriş alanına kullanıcı adı girerek arama yap. Sonraki adımda bu endpointi kasıtlı zafiyetli hale getirip
+                    `' OR 1=1 --` gibi payload'larla test edeceğiz.
+                </p>
+                <form class="row g-2" method="post" asp-controller="SqlInjectionLab" asp-action="Vulnerable">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="username" placeholder="ornek: alice veya ' OR 1=1 --" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Kullanıcı Ara (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="SqlInjectionLab" asp-action="Secure">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="username" placeholder="ornek: alice veya ' OR 1=1 --" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Kullanıcı Ara (Secure)</button>
+                    </div>
+                </form>
+
+                @if (ViewData["Query"] is string q)
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @(ViewData["Mode"] ?? "Vulnerable")</p>
+                        <p class="mb-1"><strong>Gonderilen Input:</strong> <code>@(ViewData["Input"] ?? "-")</code></p>
+                        <p class="mb-1"><strong>Calisan Query:</strong></p>
+                        <code>@q</code>
+                    </div>
+                }
+
+                @if (Model is not null)
+                {
+                    <div class="mt-3">
+                        <h3 class="h6">Sonuclar</h3>
+                        @if (Model.Count > 0)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-dark table-striped table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Id</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Role</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var u in Model)
+                                        {
+                                            <tr>
+                                                <td>@u.Id</td>
+                                                <td>@u.Username</td>
+                                                <td>@u.Role</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted mb-0">Sonuc yok. Bu, secure testte beklenen bir durum olabilir.</p>
+                        }
+                    </div>
+                }
+
+                @if ((ViewData["Mode"]?.ToString() == "Secure") && Model is not null && Model.Count == 0)
+                {
+                    <div class="alert alert-success mt-3 mb-0" role="alert">
+                        Guvenli mod testi basarili: payload SQL olarak degil, normal metin olarak ele alindi.
+                    </div>
+                }
+                
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Örnek Test Payloadları</strong>
+                    <code>alice</code>,
+                    <code>' OR 1=1 --</code>,
+                    <code>' UNION SELECT 1,2,3 --</code>
+                </div>
+            </article>
+        </div>
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Öğrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>String birleştirmenin riskini görmek</li>
+                    <li>Burp Repeater ile isteği manipüle etmek</li>
+                    <li>Parametreli sorguya geçiş yapmak</li>
+                    <li>Fix sonrası retest ile doğrulamak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Guvenli Modda Ne Yaptik?</h2>
+                <p class="text-muted mb-3">
+                    Sorunu string birlestirme ile query yazmak yerine parametreli sorgu kullanarak cozdik.
+                </p>
+                <ol class="mb-0 ps-3">
+                    <li>Dinamik SQL birlestirmesini kaldirdik.</li>
+                    <li><code>WHERE Username = $username</code> seklinde sabit query kullandik.</li>
+                    <li><code>AddWithValue("$username", username)</code> ile inputu parametre olarak bagladik.</li>
+                    <li>Payload retestinde sonuc donmemesini fix kaniti olarak dogruladik.</li>
+                </ol>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hatayi Gercekte Nasil Cozmeliyiz?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Tum DB sorgularinda parametreli query veya ORM kullan.</li>
+                    <li>Kullanici girdisini dogrula (uzunluk, karakter seti, format).</li>
+                    <li>DB kullanicisini en dusuk yetkiyle calistir (least privilege).</li>
+                    <li>Hata mesajlarinda SQL detaylarini son kullaniciya gostermeme.</li>
+                    <li>Burp + otomasyon testleriyle regressions kontrolleri yap.</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adım Adım Yol Haritası</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable endpoint yaz</article>
+            <article class="step-card"><span>02</span> Payload ile açığı doğrula</article>
+            <article class="step-card"><span>03</span> Kök nedeni açıkla</article>
+            <article class="step-card"><span>04</span> Parametreli sorgu ile düzelt</article>
+            <article class="step-card"><span>05</span> Burp ile tekrar test et</article>
+            <article class="step-card"><span>06</span> Notlarını lab raporuna yaz</article>
+        </div>
+    </article>
+</section>

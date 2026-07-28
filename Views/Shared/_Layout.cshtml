@@ -1,9 +1,28 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
+    @{
+        var pageTitle = ViewData["Title"]?.ToString() ?? "VulnLab.NET";
+        var seoDescription = ViewData["Description"]?.ToString()
+            ?? "VulnLab.NET ile siber guvenlik egitimi al, OWASP zafiyetlerini pratik lab ortaminda kesfet, dogrula ve guvenli kod yazarak cozumle.";
+        var seoKeywords = ViewData["Keywords"]?.ToString()
+            ?? "siber guvenlik egitimi, owasp nedir, owasp egitimi, web guvenligi, sql injection, xss, csrf, idor";
+        var canonicalUrl = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.Path}";
+    }
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - VulnLab.NET</title>
+    <title>@pageTitle - VulnLab.NET</title>
+    <meta name="description" content="@seoDescription" />
+    <meta name="keywords" content="@seoKeywords" />
+    <link rel="canonical" href="@canonicalUrl" />
+
+    <meta property="og:title" content="@pageTitle - VulnLab.NET" />
+    <meta property="og:description" content="@seoDescription" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@canonicalUrl" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="@pageTitle - VulnLab.NET" />
+    <meta name="twitter:description" content="@seoDescription" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/VulnLab.NET.styles.css" asp-append-version="true" />
@@ -22,9 +41,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -38,7 +54,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - VulnLab.NET - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2026 - VulnLab.NET
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

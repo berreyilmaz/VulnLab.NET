@@ -1,0 +1,123 @@
+@{
+    ViewData["Title"] = "SSRF Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var targetUrl = ViewData["TargetUrl"]?.ToString() ?? string.Empty;
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 07 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">SSRF</h1>
+            <p class="lead mb-2">
+                Sunucunun kullanici verdigi URL'e istek atmasi durumunda internal servislere erisim riskini kesfet ve allowlist ile engelle.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">Server-side Request</span>
+                <span class="chip">Allowlist</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">SSRF Demo - URL Fetch</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable akista URL dogrudan islenir. Secure akista HTTPS zorunlulugu, host allowlist ve internal adres engeli vardir.
+                </p>
+
+                <form class="row g-2" method="post" action="/labs/ssrf/vulnerable">
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="targetUrl" placeholder="ornek: http://127.0.0.1/admin" />
+                    </div>
+                    <div class="col-sm-3 d-grid">
+                        <button class="btn btn-primary" type="submit">Fetch (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" action="/labs/ssrf/secure">
+                    <div class="col-sm-9">
+                        <input class="form-control" type="text" name="targetUrl" placeholder="ornek: https://api.weather.com/data" />
+                    </div>
+                    <div class="col-sm-3 d-grid">
+                        <button class="btn btn-success" type="submit">Fetch (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Hedef URL:</strong> <code>@targetUrl</code></p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Ornek Test URL'leri</strong>
+                    <code>http://127.0.0.1/admin</code>,
+                    <code>http://169.254.169.254/latest/meta-data</code>,
+                    <code>https://api.weather.com/data</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Kullanici kontrollu URL'in neden riskli oldugunu gormek</li>
+                    <li>Internal IP ve metadata endpoint riskini anlamak</li>
+                    <li>Allowlist + scheme kontrolu uygulamak</li>
+                    <li>Fix sonrasi retest ile engellemeyi dogrulamak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Sunucu dis URL yerine herhangi bir adrese istek atabildi.</li>
+                    <li>Host/scheme kontrolu olmadan fetch islemi yapildi.</li>
+                    <li>Saldirgan internal servislere pivot yapabildi.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Sadece HTTPS kabul edildi.</li>
+                    <li>Host allowlist disindakiler reddedildi.</li>
+                    <li>Private/internal adresler engellendi.</li>
+                    <li>Gercek sistemde DNS rebinding ve redirect zinciri de kontrol edilmeli.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable URL fetch endpointini calistir</article>
+            <article class="step-card"><span>02</span> Internal URL payloadlarini dene</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> HTTPS + allowlist kontrolu ekle</article>
+            <article class="step-card"><span>05</span> Internal IP engeli ile retest yap</article>
+            <article class="step-card"><span>06</span> Redirect/DNS kontrollerini not et</article>
+        </div>
+    </article>
+</section>

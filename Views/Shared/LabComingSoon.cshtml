@@ -1,0 +1,20 @@
+@{
+    var labTitle = ViewData["LabTitle"]?.ToString() ?? "Lab";
+    ViewData["Title"] = labTitle;
+}
+
+<section class="hero-panel">
+    <span class="eyebrow">LAB PREVIEW</span>
+    <h1 class="display-5 fw-bold mt-2 mb-3">@labTitle</h1>
+    <p class="lead mb-0">
+        Bu lab icin ayri controller yapisi hazir. Senaryo ve exploit adimlari yakinda eklenecek.
+    </p>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-2">Hazirlik Durumu</h2>
+        <p class="mb-3 text-muted">Rotalama ve controller ayrimi tamamlandi.</p>
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">Lab Listesine Don</a>
+    </article>
+</section>

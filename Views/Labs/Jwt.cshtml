@@ -1,0 +1,148 @@
+@{
+    ViewData["Title"] = "JWT Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var result = ViewData["Result"]?.ToString();
+    var parsedPayload = ViewData["ParsedPayload"]?.ToString();
+    var safeDemoToken = ViewData["SafeDemoToken"]?.ToString() ?? "-";
+    var forgedAdminToken = ViewData["ForgedAdminToken"]?.ToString() ?? "-";
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 06 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">JWT</h1>
+            <p class="lead mb-2">
+                JWT dogrulamasinda imza/algoritma kontrolleri atlanirsa yetki bypass nasil olur, guvenli dogrulama ile nasil engellenir.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">Token Validation</span>
+                <span class="chip">HS256 Signature</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">JWT Demo</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable akista token payload okunur ama imza kontrol edilmez. Secure akista HS256 imzasi zorunlu olarak dogrulanir.
+                </p>
+
+                <form class="row g-2" method="post" action="/labs/jwt/vulnerable">
+                    <div class="col-12">
+                        <textarea id="vulnerableTokenInput" class="form-control" name="token" rows="4" placeholder="JWT token buraya"></textarea>
+                    </div>
+                    <div class="col-12 d-grid">
+                        <button class="btn btn-primary" type="submit">Token Kontrol (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" action="/labs/jwt/secure">
+                    <div class="col-12">
+                        <textarea id="secureTokenInput" class="form-control" name="token" rows="4" placeholder="JWT token buraya"></textarea>
+                    </div>
+                    <div class="col-12 d-grid">
+                        <button class="btn btn-success" type="submit">Token Kontrol (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Sonuc:</strong> @result</p>
+                        @if (!string.IsNullOrWhiteSpace(parsedPayload))
+                        {
+                            <p class="mb-1"><strong>Parsed Payload:</strong></p>
+                            <code>@parsedPayload</code>
+                        }
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Gecerli Demo Token (role=user)</strong>
+                    <code>@safeDemoToken</code>
+                    <p class="text-muted mt-2 mb-0">
+                        Bu token secure endpointte gecerli sayilir. Payloaddaki role alanini degistirirsen imza bozulur ve secure endpoint reddeder.
+                    </p>
+                </div>
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Manipule Admin Token (imza bozuk)</strong>
+                    <code>@forgedAdminToken</code>
+                    <p class="text-muted mt-2 mb-2">
+                        Bu token lab icin bilerek uretildi: payload <code>role=admin</code>, imza eski kaldigi icin secure endpointte reddedilmesi gerekir.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button class="btn btn-outline-light btn-sm" type="button"
+                                onclick="document.getElementById('vulnerableTokenInput').value='@forgedAdminToken'">
+                            Vulnerable alana koy
+                        </button>
+                        <button class="btn btn-outline-light btn-sm" type="button"
+                                onclick="document.getElementById('secureTokenInput').value='@forgedAdminToken'">
+                            Secure alana koy
+                        </button>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Imza dogrulamasi olmayan JWT kontrolunun riskini gormek</li>
+                    <li>Algoritma whitelist (HS256) zorunlulugunu anlamak</li>
+                    <li>HMAC imza kontrolu uygulamak</li>
+                    <li>Fix sonrasi token manipule retest yapmak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Uygulama payloadi dogrudan guvenilir kabul etti.</li>
+                    <li>Imza ve algoritma kontrolleri atlandi.</li>
+                    <li>Saldirgan role alanini <code>admin</code> yapip tokeni manipule edebildi.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>JWT formati (3 parca) dogrulandi.</li>
+                    <li>Header'da yalnizca <code>HS256</code> kabul edildi.</li>
+                    <li>HMAC-SHA256 ile imza sabit-zamanli karsilastirma yapildi.</li>
+                    <li>Imzasi gecersiz tokenlar reddedildi.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable token kontrolunu calistir</article>
+            <article class="step-card"><span>02</span> Payload role alanini manipule et</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> Algoritma + imza dogrulamasi ekle</article>
+            <article class="step-card"><span>05</span> Manipule tokeni secure endpointte retest et</article>
+            <article class="step-card"><span>06</span> Secret rotation ve expiry kontrollerini not et</article>
+        </div>
+    </article>
+</section>

@@ -1,0 +1,156 @@
+@{
+    ViewData["Title"] = "Race Condition Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var requestCount = ViewData["RequestCount"]?.ToString() ?? "-";
+    var amount = ViewData["Amount"]?.ToString() ?? "-";
+    var initialBalance = ViewData["InitialBalance"]?.ToString() ?? "-";
+    var finalBalance = ViewData["FinalBalance"]?.ToString() ?? "-";
+    var expectedBalance = ViewData["ExpectedBalance"]?.ToString() ?? "-";
+    var successCount = ViewData["SuccessCount"]?.ToString() ?? "-";
+    var blockedCount = ViewData["BlockedCount"]?.ToString() ?? "-";
+    var raceDetected = ViewData["RaceDetected"] as bool? ?? false;
+    var traceLines = ViewData["TraceLines"] as string[] ?? [];
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 09 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">Race Condition</h1>
+            <p class="lead mb-2">
+                Ayni kaynaga gelen esit zamanli islemler atomik degilse bakiye/stock gibi kritik degerler tutarsiz hale gelebilir.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Advanced</span>
+                <span class="chip">Concurrent Requests</span>
+                <span class="chip">Atomicity</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">Withdraw Simulation</h2>
+                <p class="text-muted mb-3">
+                    Baslangic bakiye 1000. Ayni anda birden fazla cekim istegi simule edilir.
+                    Vulnerable modda kontrol ve guncelleme ayrik oldugu icin race olusabilir.
+                </p>
+
+                <form class="row g-2" method="post" action="/labs/race-condition/vulnerable">
+                    <div class="col-sm-4">
+                        <input class="form-control" type="number" name="requestCount" min="1" max="500" placeholder="Istek sayisi (or. 120)" />
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="number" name="amount" min="1" max="200" placeholder="Cekim tutari (or. 20)" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Simule Et (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" action="/labs/race-condition/secure">
+                    <div class="col-sm-4">
+                        <input class="form-control" type="number" name="requestCount" min="1" max="500" placeholder="Istek sayisi (or. 120)" />
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="number" name="amount" min="1" max="200" placeholder="Cekim tutari (or. 20)" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Simule Et (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Istek/Tutar:</strong> @requestCount / @amount</p>
+                        <p class="mb-1"><strong>Baslangic Bakiye:</strong> @initialBalance</p>
+                        <p class="mb-1"><strong>Final Bakiye:</strong> @finalBalance</p>
+                        <p class="mb-1"><strong>Beklenen Bakiye:</strong> @expectedBalance</p>
+                        <p class="mb-1"><strong>Basarili/Engellenen:</strong> @successCount / @blockedCount</p>
+                        <p class="mb-0">
+                            <strong>Race Durumu:</strong>
+                            @if (raceDetected)
+                            {
+                                <span class="text-danger">Race condition tespit edildi.</span>
+                            }
+                            else
+                            {
+                                <span class="text-success">Tutarlilik korunuyor.</span>
+                            }
+                        </p>
+                    </div>
+
+                    @if (traceLines.Length > 0)
+                    {
+                        <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                            <strong class="d-block mb-2">Islem Izleri (ilk 14)</strong>
+                            <ul class="mb-0 ps-3">
+                                @foreach (var line in traceLines)
+                                {
+                                    <li>@line</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+                }
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Check-then-act paternindeki race riskini gormek</li>
+                    <li>Concurrent istekte tutarsiz bakiye sorununu anlamak</li>
+                    <li>Lock/atomik islemlerle problemi cozmeyi ogrenmek</li>
+                    <li>Fix sonrasi tutarlilik retesti yapmak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Bakiye kontrolu ve dusurme islemi atomik degildi.</li>
+                    <li>Ayni anda gelen istekler ayni bakiye snapshot'ini okudu.</li>
+                    <li>Lost update nedeniyle final bakiye beklenenden farkli oldu.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Kritik bolge lock ile seri hale getirildi.</li>
+                    <li>Check ve update tek atomik adimda uygulandi.</li>
+                    <li>Gercek sistemde DB transaction + satir kilidi kullanimi onerilir.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable simuleyi calistir</article>
+            <article class="step-card"><span>02</span> Yüksek istek sayisiyla sonucu gozlemle</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> Lock/atomik guncelleme ekle</article>
+            <article class="step-card"><span>05</span> Secure modda retest yap</article>
+            <article class="step-card"><span>06</span> DB transaction stratejisini not et</article>
+        </div>
+    </article>
+</section>

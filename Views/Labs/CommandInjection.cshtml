@@ -1,0 +1,127 @@
+@{
+    ViewData["Title"] = "Command Injection Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var host = ViewData["Host"]?.ToString() ?? string.Empty;
+    var command = ViewData["Command"]?.ToString();
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 10 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">Command Injection</h1>
+            <p class="lead mb-2">
+                Kullanici girdisi shell komutuna dogrudan eklendiginde saldirgan ek komut calistirabilir. Guvenli dogrulama ve sabit komut modeli ile engelle.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Advanced</span>
+                <span class="chip">OS Command Injection</span>
+                <span class="chip">Input Validation</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">Host Check Demo</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable akista host girdisi shell komutuna dogrudan eklenir. Secure akista regex/allowlist ile filtrelenir.
+                </p>
+
+                <form class="row g-2" method="post" action="/labs/command-injection/vulnerable">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="host" placeholder="ornek: example.com veya 127.0.0.1; cat /etc/passwd" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Calistir (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" action="/labs/command-injection/secure">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="host" placeholder="ornek: example.com" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Calistir (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Host Input:</strong> <code>@host</code></p>
+                        @if (!string.IsNullOrWhiteSpace(command))
+                        {
+                            <p class="mb-1"><strong>Olusan Komut:</strong> <code>@command</code></p>
+                        }
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Ornek Payloadlar</strong>
+                    <code>127.0.0.1; cat /etc/passwd</code>,
+                    <code>example.com && whoami</code>,
+                    <code>8.8.8.8 | uname -a</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Shell komut birlestirmenin riskini gormek</li>
+                    <li>Metacharacter tokenlari tanimak</li>
+                    <li>Allowlist dogrulama uygulamak</li>
+                    <li>Fix sonrasi payload retest yapmak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Kullanici girdisi shell komutuna dogrudan eklendi.</li>
+                    <li>Komut ayirici karakterler filtrelenmedi.</li>
+                    <li>Ek komut calistirma (RCE benzeri etki) olusabildi.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Host girdisi allowlist regex ile dogrulandi.</li>
+                    <li>Riskli tokenlar (`;`, `&&`, `|`, `$()`) reddedildi.</li>
+                    <li>Gercek sistemde shell yerine process argumanlari ayrik verilmeli.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable komut akisini calistir</article>
+            <article class="step-card"><span>02</span> Metacharacter payloadlari dene</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> Input allowlist ve token filtresi ekle</article>
+            <article class="step-card"><span>05</span> Secure akista retest yap</article>
+            <article class="step-card"><span>06</span> Shell-free process tasarimini not et</article>
+        </div>
+    </article>
+</section>

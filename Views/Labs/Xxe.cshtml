@@ -1,0 +1,119 @@
+@{
+    ViewData["Title"] = "XXE Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 08 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">XXE</h1>
+            <p class="lead mb-2">
+                XML parser ayarlari yanlis oldugunda external entity ile hassas veri sizmasi nasil olur, guvenli parser konfigurasyonu ile nasil engellenir.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">XML External Entity</span>
+                <span class="chip">Secure Parser</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">XXE Demo - XML Parse</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable akista DTD/external entity acik. Secure akista DTD yasak ve XmlResolver kapali.
+                </p>
+
+                <form class="row g-2" method="post" action="/labs/xxe/vulnerable">
+                    <div class="col-12">
+                        <textarea class="form-control" name="xmlInput" rows="7" placeholder="XML payload buraya"></textarea>
+                    </div>
+                    <div class="col-12 d-grid">
+                        <button class="btn btn-primary" type="submit">Parse (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" action="/labs/xxe/secure">
+                    <div class="col-12">
+                        <textarea class="form-control" name="xmlInput" rows="7" placeholder="XML payload buraya"></textarea>
+                    </div>
+                    <div class="col-12 d-grid">
+                        <button class="btn btn-success" type="submit">Parse (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Ornek XXE Payload</strong>
+                    <code>&lt;!DOCTYPE note [ &lt;!ENTITY xxe SYSTEM "file:///etc/hosts"&gt; ]&gt;</code><br />
+                    <code>&lt;note&gt;&lt;to&gt;&amp;xxe;&lt;/to&gt;&lt;message&gt;test&lt;/message&gt;&lt;/note&gt;</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>DTD/external entity riskini anlamak</li>
+                    <li>Parser ayarlarinin guvenlige etkisini gormek</li>
+                    <li>DtdProcessing ve XmlResolver kontrolu uygulamak</li>
+                    <li>Fix sonrasi retest ile dogrulama yapmak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>XML parser external entity parse edecek sekilde ayarlandi.</li>
+                    <li>Kullanici girdisindeki DTD ifadesi dogrudan isleme alindi.</li>
+                    <li>Bu durum local file/metadata erisim riskine yol acti.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li><code>DtdProcessing = Prohibit</code> yapildi.</li>
+                    <li><code>XmlResolver = null</code> ile external entity kapatildi.</li>
+                    <li>Guvenli parser varsayilani zorunlu hale getirildi.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable parser ayarini calistir</article>
+            <article class="step-card"><span>02</span> XXE payload ile parse dene</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> DTD ve resolver'i kapat</article>
+            <article class="step-card"><span>05</span> Secure parser ile retest yap</article>
+            <article class="step-card"><span>06</span> Input validation ve logging notlarini ekle</article>
+        </div>
+    </article>
+</section>

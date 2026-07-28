@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "IDOR Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var currentUser = ViewData["CurrentUser"]?.ToString() ?? "bob";
+    var requestedId = ViewData["RequestedId"]?.ToString() ?? "-";
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 04 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">IDOR</h1>
+            <p class="lead mb-2">
+                Referans bazli erisim kontrolunun eksik oldugu durumda farkli kayitlara nasil ulasilabildigini kesfet.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">Broken Access Control</span>
+                <span class="chip">Authorization Check</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">IDOR Demo - Belge Goruntuleme</h2>
+                <p class="text-muted mb-3">
+                    Simule edilen aktif kullanici: <code>@currentUser</code>. Belge ID degistirerek farkli kayitlara ulasmayi dene.
+                </p>
+                <p class="text-muted mb-3">
+                    Ornek belgeler: <code>1001 (alice)</code>, <code>1002 (bob)</code>, <code>1003 (charlie)</code>
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="IdorLab" asp-action="Vulnerable">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="number" name="documentId" min="1001" max="1010" placeholder="ornek: 1002" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Belge Getir (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="IdorLab" asp-action="Secure">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="number" name="documentId" min="1001" max="1010" placeholder="ornek: 1002" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Belge Getir (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Kullanici:</strong> <code>@currentUser</code></p>
+                        <p class="mb-1"><strong>Istenen Belge ID:</strong> <code>@requestedId</code></p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Tahmin edilebilir ID'nin nasil risk oldugunu gormek</li>
+                    <li>Kimlik dogrulama ile yetkilendirmenin farkini anlamak</li>
+                    <li>Nesne seviyesinde erisim kontrolu uygulamak</li>
+                    <li>Fix sonrasi retest ile erisim reddini dogrulamak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Endpoint yalnizca <code>documentId</code> parametresine guveniyor.</li>
+                    <li>Belgenin aktif kullaniciya ait olup olmadigi kontrol edilmiyor.</li>
+                    <li>Saldirgan ID'yi degistirerek baska kayitlari okuyabiliyor.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Belge cekildikten sonra owner ile aktif kullanici eslestirildi.</li>
+                    <li>Eslesme yoksa erisim reddedildi.</li>
+                    <li>Kaynak bazli yetki kontrolu her istekte zorunlu hale getirildi.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable endpointi calistir</article>
+            <article class="step-card"><span>02</span> ID manipule ederek farkli belge iste</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> Owner bazli yetki kontrolu ekle</article>
+            <article class="step-card"><span>05</span> Secure endpointte retest yap</article>
+            <article class="step-card"><span>06</span> Log ve audit kontrollerini not et</article>
+        </div>
+    </article>
+</section>

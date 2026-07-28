@@ -1,0 +1,123 @@
+@{
+    ViewData["Title"] = "File Upload Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 05 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">File Upload</h1>
+            <p class="lead mb-2">
+                Dosya yukleme endpointlerinde kontrol eksikligi oldugunda zararlı icerik nasil kabul edilir, guvenli dogrulama ile nasil engellenir.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">Unrestricted Upload</span>
+                <span class="chip">Validation</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">Upload Demo</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable akista dosya tipi ve boyutu kontrol edilmez. Secure akista uzanti ve boyut dogrulamalari uygulanir.
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="FileUploadLab" asp-action="Vulnerable" enctype="multipart/form-data">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="file" name="uploadFile" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Dosya Yukle (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="FileUploadLab" asp-action="Secure" enctype="multipart/form-data">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="file" name="uploadFile" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Dosya Yukle (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Secure Kurallari (Demo)</strong>
+                    <ul class="mb-0 ps-3">
+                        <li>Izinli uzantilar: <code>.jpg, .jpeg, .png, .pdf</code></li>
+                        <li>Maksimum boyut: <code>2 MB</code></li>
+                        <li>Gecersiz dosyalar reddedilir</li>
+                    </ul>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Kontrolsuz upload riskini anlamak</li>
+                    <li>Uzanti/boyut dogrulamasini uygulamak</li>
+                    <li>Deny-by-default mantigini benimsemek</li>
+                    <li>Fix sonrasi retest yapmak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Upload endpointi gelen dosyayi kosulsuz kabul etti.</li>
+                    <li>Uzanti, MIME, boyut kontrolleri yoktu.</li>
+                    <li>Zararli script/webshell dosyalari sisteme alinabilir hale geldi.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Izinli uzanti listesi (allowlist) uygulandi.</li>
+                    <li>Maksimum boyut limiti eklendi.</li>
+                    <li>Kontrolleri gecemeyen dosyalar reddedildi.</li>
+                    <li>Gercek sistemde: random dosya adi + izole klasor + AV tarama onerilir.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable upload endpointini calistir</article>
+            <article class="step-card"><span>02</span> Riskli uzanti ile dosya yuklemeyi dene</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> Allowlist ve boyut limiti ekle</article>
+            <article class="step-card"><span>05</span> Secure endpointte retest yap</article>
+            <article class="step-card"><span>06</span> Izolasyon ve tarama kontrollerini not et</article>
+        </div>
+    </article>
+</section>

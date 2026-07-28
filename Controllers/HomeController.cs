@@ -7,6 +7,19 @@ namespace VulnLab.NET.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private static readonly IReadOnlyList<LabDefinition> Labs =
+    [
+        new() { Slug = "sql-injection", Title = "SQL Injection", Difficulty = "Beginner", Route = "/labs/sql-injection" },
+        new() { Slug = "xss", Title = "Cross Site Scripting (XSS)", Difficulty = "Beginner", Route = "/labs/xss" },
+        new() { Slug = "csrf", Title = "CSRF", Difficulty = "Beginner", Route = "/labs/csrf" },
+        new() { Slug = "idor", Title = "IDOR", Difficulty = "Intermediate", Route = "/labs/idor" },
+        new() { Slug = "file-upload", Title = "File Upload", Difficulty = "Intermediate", Route = "/labs/file-upload" },
+        new() { Slug = "ssrf", Title = "SSRF", Difficulty = "Intermediate", Route = "/labs/ssrf" },
+        new() { Slug = "xxe", Title = "XXE", Difficulty = "Intermediate", Route = "/labs/xxe" },
+        new() { Slug = "jwt", Title = "JWT", Difficulty = "Intermediate", Route = "/labs/jwt" },
+        new() { Slug = "race-condition", Title = "Race Condition", Difficulty = "Advanced", Route = "/labs/race-condition" },
+        new() { Slug = "command-injection", Title = "Command Injection", Difficulty = "Advanced", Route = "/labs/command-injection" }
+    ];
 
     public HomeController(ILogger<HomeController> logger)
     {
@@ -15,7 +28,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View();
+        return View(Labs);
     }
 
     public IActionResult Privacy()

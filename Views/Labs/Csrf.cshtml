@@ -1,0 +1,133 @@
+@{
+    ViewData["Title"] = "CSRF Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var toAccount = ViewData["ToAccount"]?.ToString() ?? "-";
+    var amount = ViewData["Amount"]?.ToString() ?? "0";
+    var message = ViewData["Message"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 03 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">CSRF</h1>
+            <p class="lead mb-2">
+                Kullanici oturumu acikken, baska bir siteden gonderilen istegin nasil isleme alindigini gor ve token ile koru.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Beginner</span>
+                <span class="chip">State Changing Request</span>
+                <span class="chip">Anti Forgery Token</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">CSRF Demo - Para Transferi</h2>
+                <p class="text-muted mb-3">
+                    Ayni transfer islemini once token dogrulamasi olmadan, sonra anti-forgery token ile deneyerek farki gozlemle.
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="CsrfLab" asp-action="VulnerableTransfer" asp-antiforgery="false">
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="toAccount" placeholder="Hesap: TR00-1234" />
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="number" name="amount" min="1" placeholder="Tutar" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Transfer (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="CsrfLab" asp-action="SecureTransfer">
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" name="toAccount" placeholder="Hesap: TR00-1234" />
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="number" name="amount" min="1" placeholder="Tutar" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Transfer (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Hedef Hesap:</strong> <code>@toAccount</code></p>
+                        <p class="mb-1"><strong>Tutar:</strong> <code>@amount</code></p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @message</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Ornek Saldiri Formu (Konsept)</strong>
+                    <code>&lt;form action="/labs/csrf/vulnerable-transfer" method="POST"&gt;...&lt;/form&gt;</code>
+                    <p class="text-muted mb-0 mt-2">
+                        Kullanici hedef uygulamada login ise, baska bir site bu istegi arka planda gonderebilir.
+                    </p>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>CSRF'in state-changing endpointleri nasil etkiledigini gormek</li>
+                    <li>Token olmayan formun neden riskli oldugunu anlamak</li>
+                    <li>Anti-forgery token dogrulamasini uygulamak</li>
+                    <li>Fix sonrasi retest ile korumayi dogrulamak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Uygulama sadece cookie tabanli oturuma guveniyor.</li>
+                    <li>Istek gercek formdan mi geldi diye dogrulama yok.</li>
+                    <li>Saldirganin sayfasi kurbana otomatik POST attirabiliyor.</li>
+                    <li>Token kontrolu olmadiginda istek meşru saniliyor.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Secure endpointte <code>[ValidateAntiForgeryToken]</code> kullanildi.</li>
+                    <li>Secure formda anti-forgery token otomatik gonderildi.</li>
+                    <li>Eksik/gecersiz token durumunda istek reddedilir.</li>
+                    <li>Ek katman olarak SameSite cookie ve Origin/Referer kontrolu onerilir.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable transfer endpointi calistir</article>
+            <article class="step-card"><span>02</span> Token olmadan istegi gonder</article>
+            <article class="step-card"><span>03</span> Kök nedeni analiz et</article>
+            <article class="step-card"><span>04</span> ValidateAntiForgeryToken ekle</article>
+            <article class="step-card"><span>05</span> Secure formdan tekrar test et</article>
+            <article class="step-card"><span>06</span> SameSite + Origin kontrollerini not et</article>
+        </div>
+    </article>
+</section>

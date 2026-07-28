@@ -1,0 +1,144 @@
+@{
+    ViewData["Title"] = "XSS Lab";
+    var input = ViewData["Input"]?.ToString() ?? string.Empty;
+    var mode = ViewData["Mode"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 02 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">Cross Site Scripting (XSS)</h1>
+            <p class="lead mb-2">
+                Kullanici girdisinin HTML/JS olarak calistigi noktayi bul ve output encoding ile kapat.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Beginner</span>
+                <span class="chip">Reflected XSS</span>
+                <span class="chip">Output Encoding</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">XSS Demo</h2>
+                <p class="text-muted mb-3">
+                    Ayni inputu iki farkli endpointe gonder. Vulnerable mod ham HTML render eder, secure mod encoded yazar.
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="XssLab" asp-action="Vulnerable">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="comment" placeholder="ornek: <script>alert('xss')</script>" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Yorum Gonder (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="XssLab" asp-action="Secure">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="comment" placeholder="ornek: <script>alert('xss')</script>" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Yorum Gonder (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-0"><strong>Girdi:</strong> <code>@input</code></p>
+                    </div>
+
+                    <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                        <p class="mb-2"><strong>Uygulamada Gorunen Cikti</strong></p>
+                        @if (mode == "Vulnerable")
+                        {
+                            <div class="p-2 rounded-2 bg-dark-subtle text-dark">
+                                @Html.Raw(input)
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="p-2 rounded-2 bg-dark-subtle text-dark">
+                                @input
+                            </div>
+                        }
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Test Payloadlari</strong>
+                    <code>&lt;script&gt;alert('xss')&lt;/script&gt;</code>,
+                    <code>&lt;img src=x onerror=alert(1)&gt;</code>,
+                    <code>&lt;svg onload=alert(1)&gt;</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Reflected XSS'in nasil tetiklendigini gormek</li>
+                    <li>Raw render ile encoded render farkini anlamak</li>
+                    <li>Burp Repeater ile payloadlari tekrar etmek</li>
+                    <li>Output encoding ile fix dogrulamak</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <p class="text-muted mb-3">
+                    Uygulama, kullanicidan gelen veriyi guvenilir kabul edip HTML olarak render ettiginde tarayici bu veriyi kod gibi yorumlar.
+                </p>
+                <ul class="mb-0 ps-3">
+                    <li>Untrusted input dogrudan output'a yazildi.</li>
+                    <li>Vulnerable modda <code>Html.Raw(...)</code> kullanildi.</li>
+                    <li>Bu nedenle payload JavaScript olarak calisti.</li>
+                    <li>Reflected XSS olustu (istek-cevap icinde anlik yansitma).</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <p class="text-muted mb-3">
+                    Cozum, kullanici girdisini kod gibi degil metin gibi ele almaktir. Bunu output encoding ile sagladik.
+                </p>
+                <ol class="mb-0 ps-3">
+                    <li><code>Html.Raw</code> kullanimini secure akistan kaldirdik.</li>
+                    <li>Razor'un varsayilan escaping davranisini kullandik (<code>@input</code>).</li>
+                    <li>Payload retestinde script'in calismadigini dogruladik.</li>
+                    <li>Ek savunma olarak CSP ve sanitize katmanlari onerildi.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable render noktasi olustur</article>
+            <article class="step-card"><span>02</span> Payload ile XSS'i tetikle</article>
+            <article class="step-card"><span>03</span> Kök nedeni acikla</article>
+            <article class="step-card"><span>04</span> Output encoding ile duzelt</article>
+            <article class="step-card"><span>05</span> Burp ile tekrar test et</article>
+            <article class="step-card"><span>06</span> CSP ve sanitize iyilestirmelerini not et</article>
+        </div>
+    </article>
+</section>

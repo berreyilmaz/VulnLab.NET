@@ -1,8 +1,129 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IReadOnlyList<VulnLab.NET.Models.LabDefinition>
+@{
+    ViewData["Title"] = "Siber Guvenlik Egitimi ve OWASP Lablari";
+    ViewData["Description"] = "VulnLab.NET ile siber guvenlik egitimi al, OWASP Top 10 aciklarini uygulamali lablarda ogren, Burp Suite ile dogrula ve guvenli kodla kapat.";
+    ViewData["Keywords"] = "siber guvenlik egitimi, owasp nedir, owasp egitimi, owasp top 10, web guvenlik lablari";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero-panel">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-8">
+            <span class="eyebrow">WEB APP SECURITY PLAYGROUND</span>
+            <h1 class="display-4 fw-bold mt-2 mb-3">VulnLab.NET</h1>
+            <p class="lead mb-2">
+                Gerçek şirketlerde karşılaşılan güvenlik açıklarını, kasıtlı olarak zafiyetli hazırlanmış uygulamalar üzerinde öğren.
+            </p>
+            <p class="mb-4">
+                Her lab'da hem saldıran hem savunan rolde ilerle: açığı keşfet, Burp Suite ile doğrula, güvenli kodla kapat ve tekrar test et.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Attacker Mode</span>
+                <span class="chip">Defender Mode</span>
+                <span class="chip">Hands-on Labs</span>
+                <span class="chip">Secure Coding</span>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="stats-grid">
+                <article class="stat-card">
+                    <strong>@Model.Count+</strong>
+                    <span>Lab Konusu</span>
+                </article>
+                <article class="stat-card">
+                    <strong>2 Rol</strong>
+                    <span>Saldıran + Savunan</span>
+                </article>
+                <article class="stat-card">
+                    <strong>6 Adım</strong>
+                    <span>Uçtan Uca Akış</span>
+                </article>
+                <article class="stat-card">
+                    <strong>Burp</strong>
+                    <span>Doğrulama Testleri</span>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <h2 class="h4 mb-3">Öğrenme Akışı</h2>
+    <div class="workflow-steps">
+        <article class="step-card"><span>01</span> Vulnerable Application</article>
+        <article class="step-card"><span>02</span> Açığı keşfet</article>
+        <article class="step-card"><span>03</span> Neden oluştuğunu anla</article>
+        <article class="step-card"><span>04</span> Burp Suite ile doğrula</article>
+        <article class="step-card"><span>05</span> Güvenli kod yaz</article>
+        <article class="step-card"><span>06</span> Tekrar test et</article>
+    </div>
+</section>
+
+<section class="mt-4 pb-2">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="h4 mb-0">Web Security Labs</h2>
+        <span class="text-muted small">@Model.Count lab</span>
+    </div>
+    <div class="row g-3">
+        @foreach (var lab in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <article class="lab-card h-100">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="risk-dot" aria-hidden="true"></span>
+                        <span class="badge text-bg-dark">@lab.Difficulty</span>
+                    </div>
+                    <h3 class="h5 mb-2">@lab.Title</h3>
+                    <p class="text-muted small mt-2 mb-0">
+                        Yakında: interaktif saldırı/savunma senaryosu.
+                    </p>
+                    <div class="mt-3">
+                        @if (!string.IsNullOrWhiteSpace(lab.Route))
+                        {
+                            <a class="btn btn-primary btn-sm" href="@lab.Route">
+                                Lab'a Gir
+                            </a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-outline-light btn-sm" type="button" disabled>
+                                Yakında
+                            </button>
+                        }
+                    </div>
+                </article>
+            </div>
+        }
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-4">
+            <article class="lab-card h-100 seo-card">
+                <h2 class="h5 mb-2">Siber Guvenlik Egitimi</h2>
+                <p class="mb-0 text-muted">
+                    VulnLab.NET, teoriden cok pratige odaklanan bir siber guvenlik egitimi deneyimi sunar.
+                    Her senaryoda once acigi istismar eder, sonra guvenli kodla kapatir ve yeniden test edersin.
+                </p>
+            </article>
+        </div>
+        <div class="col-lg-4">
+            <article class="lab-card h-100 seo-card">
+                <h2 class="h5 mb-2">OWASP Nedir?</h2>
+                <p class="mb-0 text-muted">
+                    OWASP, web uygulama guvenligi konusunda acik kaynak rehberler ve standartlar ureten topluluktur.
+                    SQL Injection, XSS, CSRF, IDOR gibi zafiyetler bu kapsamda ele alinir ve lablarda uygulamali ogrenilir.
+                </p>
+            </article>
+        </div>
+        <div class="col-lg-4">
+            <article class="lab-card h-100 seo-card">
+                <h2 class="h5 mb-2">OWASP Egitimi</h2>
+                <p class="mb-0 text-muted">
+                    OWASP egitimi alirken en iyi yontem, aciklari canli ortamda denemek ve fix yazmaktir.
+                    VulnLab.NET bu sureci adim adim yuruterek hem red team hem blue team perspektifi kazandirir.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
