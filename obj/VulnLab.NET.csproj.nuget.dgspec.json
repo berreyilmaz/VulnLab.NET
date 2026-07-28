@@ -10,7 +10,7 @@
         "projectUniqueName": "/Users/berreyilmaz/Desktop/VulnLab.NET/VulnLab.NET.csproj",
         "projectName": "VulnLab.NET",
         "projectPath": "/Users/berreyilmaz/Desktop/VulnLab.NET/VulnLab.NET.csproj",
-        "packagesPath": "/Users/berreyilmaz/.nuget/packages/",
+        "packagesPath": "/var/folders/nm/m0vm4t6d3_z1_c0p0z1x7p0m0000gn/T/cursor-sandbox-cache/b6ec9fa3b0d5fc3ed97973a72a03794b/nuget",
         "outputPath": "/Users/berreyilmaz/Desktop/VulnLab.NET/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
@@ -37,6 +37,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Microsoft.Data.Sqlite": {
+              "target": "Package",
+              "version": "[10.0.10, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

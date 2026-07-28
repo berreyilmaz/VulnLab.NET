@@ -26,8 +26,52 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/CommandInjection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Db21tYW5kSW5qZWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Csrf.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Dc3JmLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/FileUpload.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9GaWxlVXBsb2FkLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Idor.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9JZG9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Jwt.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Kd3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/RaceCondition.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9SYWNlQ29uZGl0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/SqlInjection.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9TcWxJbmplY3Rpb24uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Ssrf.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Tc3JmLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Xss.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Yc3MuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Xxe.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9YeGUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Shared/LabComingSoon.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0xhYkNvbWluZ1Nvb24uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Shared/_ValidationScriptsPartial.cshtml]
