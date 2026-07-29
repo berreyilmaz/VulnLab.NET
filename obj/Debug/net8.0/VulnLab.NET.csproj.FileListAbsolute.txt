@@ -16,11 +16,6 @@
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/VulnLab.NET.sourcelink.json
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets.build.json
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets.development.json
-/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets/msbuild.VulnLab.NET.Microsoft.AspNetCore.StaticWebAssets.props
-/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets/msbuild.build.VulnLab.NET.props
-/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.VulnLab.NET.props
-/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.VulnLab.NET.props
-/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets.pack.json
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/scopedcss/bundle/VulnLab.NET.styles.css
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/scopedcss/projectbundle/VulnLab.NET.bundle.scp.css
@@ -57,4 +52,12 @@
 /Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/runtimes/win-x64/native/e_sqlite3.dll
 /Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/runtimes/win-x86/native/e_sqlite3.dll
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/VulnLab.NET.csproj.AssemblyReference.cache
-/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/VulnLab.NET.csproj.CopyComplete
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/VulnLab.NET.staticwebassets.endpoints.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/rpswa.dswa.cache.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/rjimswa.dswa.cache.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/rjsmrazor.dswa.cache.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/rjsmcshtml.dswa.cache.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets.build.json.cache
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets.build.endpoints.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/swae.build.ex.cache
+/Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/VulnLab..D17AC74D.Up2Date
