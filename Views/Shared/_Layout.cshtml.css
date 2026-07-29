@@ -1,5 +1,23 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+.custom-navbar {
+    background: #1e3a8a;
+    border-bottom: 2px solid #2563eb;
+}
+
+.custom-navbar .navbar-brand {
+    color: #ffffff !important;
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.custom-navbar .nav-link {
+    color: #e2e8f0 !important;
+}
+
+.custom-navbar .nav-link:hover {
+    color: #bfdbfe !important;
+}
 
 a.navbar-brand {
   white-space: normal;
