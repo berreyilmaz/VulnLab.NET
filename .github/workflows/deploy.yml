@@ -32,6 +32,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "publish/*"
           target: "/home/ubuntu/VulnLab.NET"
+          strip_components: 1
+          overwrite: true
 
       - name: Restart Service
         uses: appleboy/ssh-action@v1.0.3
