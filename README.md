@@ -120,6 +120,21 @@ Bu proje ozellikle su arama niyetlerine deger uretmek uzere tasarlanmistir:
 - Lab raporu / write-up cikti formati
 - Docker ile tek komutta ortam kurulumu
 
-## Web Sitesi Yayinlama
+## 🌐 Canlı Yayın
 
-Deneme
+VulnLab.NET artık yayında!
+
+🔗 **Web Sitesi:** https://berrey.com.tr
+
+Proje, GitHub Actions ile oluşturulan CI/CD süreci sayesinde otomatik olarak dağıtılmaktadır. `main` dalına yapılan her gönderim (push), uygulamanın AWS EC2 sunucusuna otomatik olarak yayınlanmasını sağlar.
+
+### Kullanılan Altyapı
+
+- ASP.NET Core (.NET 9)
+- AWS EC2
+- Nginx Reverse Proxy
+- Let's Encrypt SSL
+- GitHub Actions (CI/CD)
+- Özel Alan Adı (berrey.com.tr)
+
+> 🚧 Proje aktif olarak geliştirilmektedir. Yeni OWASP Top 10 senaryoları, güvenlik açıkları ve uygulamalı laboratuvarlar düzenli olarak eklenecektir.
