@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net8.0": {
       "Microsoft.Data.Sqlite/10.0.10": {
@@ -340,7 +340,7 @@
     ]
   },
   "packageFolders": {
-    "/var/folders/nm/m0vm4t6d3_z1_c0p0z1x7p0m0000gn/T/cursor-sandbox-cache/b6ec9fa3b0d5fc3ed97973a72a03794b/nuget": {}
+    "/Users/berreyilmaz/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
@@ -348,7 +348,7 @@
       "projectUniqueName": "/Users/berreyilmaz/Desktop/VulnLab.NET/VulnLab.NET.csproj",
       "projectName": "VulnLab.NET",
       "projectPath": "/Users/berreyilmaz/Desktop/VulnLab.NET/VulnLab.NET.csproj",
-      "packagesPath": "/var/folders/nm/m0vm4t6d3_z1_c0p0z1x7p0m0000gn/T/cursor-sandbox-cache/b6ec9fa3b0d5fc3ed97973a72a03794b/nuget",
+      "packagesPath": "/Users/berreyilmaz/.nuget/packages/",
       "outputPath": "/Users/berreyilmaz/Desktop/VulnLab.NET/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
@@ -362,6 +362,7 @@
       },
       "frameworks": {
         "net8.0": {
+          "framework": "net8.0",
           "targetAlias": "net8.0",
           "projectReferences": {}
         }
@@ -370,10 +371,17 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net8.0": {
+        "framework": "net8.0",
         "targetAlias": "net8.0",
         "dependencies": {
           "Microsoft.Data.Sqlite": {
@@ -392,6 +400,20 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[8.0.29, 8.0.29]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Host.osx-arm64",
+            "version": "[8.0.29, 8.0.29]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[8.0.29, 8.0.29]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -400,7 +422,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/opt/homebrew/Cellar/dotnet@8/8.0.128/libexec/sdk/8.0.128/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/10.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
