@@ -18,7 +18,8 @@ public class HomeController : Controller
         new() { Slug = "xxe", Title = "XXE", Difficulty = "Intermediate", Route = "/labs/xxe" },
         new() { Slug = "jwt", Title = "JWT", Difficulty = "Intermediate", Route = "/labs/jwt" },
         new() { Slug = "race-condition", Title = "Race Condition", Difficulty = "Advanced", Route = "/labs/race-condition" },
-        new() { Slug = "command-injection", Title = "Command Injection", Difficulty = "Advanced", Route = "/labs/command-injection" }
+        new() { Slug = "command-injection", Title = "Command Injection", Difficulty = "Advanced", Route = "/labs/command-injection" },
+        new() { Slug = "open-redirect", Title = "Open Redirect", Difficulty = "Beginner", Route = "/labs/open-redirect" },
     ];
 
     public HomeController(ILogger<HomeController> logger)

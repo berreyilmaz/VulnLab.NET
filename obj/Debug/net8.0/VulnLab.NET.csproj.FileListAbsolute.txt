@@ -61,3 +61,9 @@
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/staticwebassets.build.endpoints.json
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/swae.build.ex.cache
 /Users/berreyilmaz/Desktop/VulnLab.NET/obj/Debug/net8.0/VulnLab..D17AC74D.Up2Date
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/publish/web.config
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/publish/appsettings.Development.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/publish/appsettings.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/publish/VulnLab.NET.deps.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/publish/VulnLab.NET.runtimeconfig.json
+/Users/berreyilmaz/Desktop/VulnLab.NET/bin/Debug/net8.0/publish/VulnLab.NET.staticwebassets.endpoints.json

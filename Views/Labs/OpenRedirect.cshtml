@@ -1,0 +1,132 @@
+@{
+    ViewData["Title"] = "Open Redirect Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var returnUrl = ViewData["ReturnUrl"]?.ToString() ?? string.Empty;
+    var message = ViewData["Message"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 11 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">Open Redirect</h1>
+            <p class="lead mb-2">
+                returnUrl parametresi dogrulanmadan kullanildiginda saldirgan kullaniciyi zararli bir siteye yonlendirebilir. Local URL kontrolu ile engelle.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Beginner</span>
+                <span class="chip">Return URL</span>
+                <span class="chip">Local URL Check</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">Login Sonrasi Yonlendirme Demo</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable akista returnUrl dogrudan Redirect edilir. Secure akista yalnizca local URL kabul edilir.
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="OpenRedirectLab" asp-action="Vulnerable">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="returnUrl" placeholder="ornek: https://example.com veya /labs/xss" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Yonlendir (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="OpenRedirectLab" asp-action="Secure">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="returnUrl" placeholder="ornek: /labs/xss" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Yonlendir (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>returnUrl:</strong> <code>@returnUrl</code></p>
+                        @if (!string.IsNullOrWhiteSpace(message))
+                        {
+                            <p class="mb-0"><strong>Sonuc:</strong> @message</p>
+                        }
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Test Payloadlari</strong>
+                    <code>https://example.com</code>,
+                    <code>//evil.example</code>,
+                    <code>/labs/xss</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Open Redirect'in phishing etkisini gormek</li>
+                    <li>Dis URL ile local path farkini anlamak</li>
+                    <li><code>Url.IsLocalUrl</code> ile koruma uygulamak</li>
+                    <li>Burp ile returnUrl parametresini manipule etmek</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <p class="text-muted mb-3">
+                    Uygulama, kullanicidan gelen returnUrl degerini dogrulamadan <code>Redirect</code> ile kullandi.
+                </p>
+                <ul class="mb-0 ps-3">
+                    <li>Untrusted input dogrudan yonlendirme hedefi oldu.</li>
+                    <li>Dis domain veya protocol-relative URL kabul edildi.</li>
+                    <li>Kullanici guvenilir siteye gittigini sanirken baska domain'e dusebilir.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <p class="text-muted mb-3">
+                    Cozum, yalnizca ayni origin'e ait (local) URL'lere izin vermektir.
+                </p>
+                <ol class="mb-0 ps-3">
+                    <li><code>Url.IsLocalUrl(returnUrl)</code> kontrolu eklendi.</li>
+                    <li>Local olmayan URL'ler reddedildi.</li>
+                    <li>Gecerli ornek: <code>/labs/xss</code> gibi relative path.</li>
+                    <li>Retest ile dis URL'nin engellendigi dogrulandi.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable redirect akisini calistir</article>
+            <article class="step-card"><span>02</span> Dis URL payload'i ile yonlenmeyi gor</article>
+            <article class="step-card"><span>03</span> Kok nedeni analiz et</article>
+            <article class="step-card"><span>04</span> IsLocalUrl kontrolu ekle</article>
+            <article class="step-card"><span>05</span> Secure akista retest yap</article>
+            <article class="step-card"><span>06</span> Allowlist yaklasimini not et</article>
+        </div>
+    </article>
+</section>

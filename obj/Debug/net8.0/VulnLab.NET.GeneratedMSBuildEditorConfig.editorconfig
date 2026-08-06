@@ -51,6 +51,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Kd3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/OpenRedirect.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9PcGVuUmVkaXJlY3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/RaceCondition.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9SYWNlQ29uZGl0aW9uLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
