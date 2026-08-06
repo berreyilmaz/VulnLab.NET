@@ -31,8 +31,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/BrokenAuth.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Ccm9rZW5BdXRoLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/CommandInjection.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Db21tYW5kSW5qZWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Cors.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Db3JzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/Csrf.cshtml]
@@ -51,8 +59,16 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9Kd3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/MassAssignment.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9NYXNzQXNzaWdubWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/OpenRedirect.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9PcGVuUmVkaXJlY3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/PathTraversal.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTGFicy9QYXRoVHJhdmVyc2FsLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/berreyilmaz/Desktop/VulnLab.NET/Views/Labs/RaceCondition.cshtml]

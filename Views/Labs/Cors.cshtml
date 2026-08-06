@@ -1,0 +1,127 @@
+@{
+    ViewData["Title"] = "CORS Misconfiguration Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var origin = ViewData["Origin"]?.ToString() ?? string.Empty;
+    var acao = ViewData["Acao"]?.ToString();
+    var credentials = ViewData["Credentials"]?.ToString();
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 15 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">CORS Misconfiguration</h1>
+            <p class="lead mb-2">
+                Origin yansitma veya <code>*</code> + credentials, baska sitelerin kimlik bilgili istekler yapmasina yol acar. Allowlist ile kisitla.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">CORS</span>
+                <span class="chip">Origin Allowlist</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">CORS Header Demo</h2>
+                <p class="text-muted mb-3">
+                    Origin girdisini gonder. Vulnerable: Origin yansitilir + credentials acik.
+                    Secure: yalnizca <code>https://trusted.vulnlab.local</code> kabul edilir.
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="CorsLab" asp-action="Vulnerable">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="origin" placeholder="ornek: https://evil.example" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Kontrol Et (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="CorsLab" asp-action="Secure">
+                    <div class="col-sm-8">
+                        <input class="form-control" type="text" name="origin" placeholder="ornek: https://trusted.vulnlab.local" />
+                    </div>
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Kontrol Et (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Origin Input:</strong> <code>@origin</code></p>
+                        <p class="mb-1"><strong>Access-Control-Allow-Origin:</strong> <code>@acao</code></p>
+                        <p class="mb-1"><strong>Allow-Credentials:</strong> <code>@credentials</code></p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Test Originleri</strong>
+                    <code>https://evil.example</code>,
+                    <code>https://trusted.vulnlab.local</code>,
+                    <code>(bos = *)</code>
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Origin reflection riskini gormek</li>
+                    <li><code>*</code> + credentials kombinasyonunu anlamak</li>
+                    <li>Allowlist tabanli CORS yazmak</li>
+                    <li>Burp ile CORS headerlarini incelemek</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Istemci Origin degeri dogrudan ACAO'ya yazildi.</li>
+                    <li>Credentials acikken yabanci Origin kabul edildi.</li>
+                    <li>Allowlist kontrolu yoktu.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Guvenilir Origin allowlist tanimlandi.</li>
+                    <li>Liste disi Origin icin ACAO yazilmiyor.</li>
+                    <li>Credentials yalnizca allowlist eslesmesinde aciliyor.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable Origin reflection dene</article>
+            <article class="step-card"><span>02</span> ACAO + credentials headerlarini oku</article>
+            <article class="step-card"><span>03</span> Kok nedeni analiz et</article>
+            <article class="step-card"><span>04</span> Allowlist ekle</article>
+            <article class="step-card"><span>05</span> Secure akista retest</article>
+            <article class="step-card"><span>06</span> Preflight / credentials not et</article>
+        </div>
+    </article>
+</section>

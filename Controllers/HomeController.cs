@@ -20,6 +20,10 @@ public class HomeController : Controller
         new() { Slug = "race-condition", Title = "Race Condition", Difficulty = "Advanced", Route = "/labs/race-condition" },
         new() { Slug = "command-injection", Title = "Command Injection", Difficulty = "Advanced", Route = "/labs/command-injection" },
         new() { Slug = "open-redirect", Title = "Open Redirect", Difficulty = "Beginner", Route = "/labs/open-redirect" },
+        new() { Slug = "path-traversal", Title = "Path Traversal", Difficulty = "Intermediate", Route = "/labs/path-traversal" },
+        new() { Slug = "mass-assignment", Title = "Mass Assignment", Difficulty = "Intermediate", Route = "/labs/mass-assignment" },
+        new() { Slug = "broken-auth", Title = "Broken Authentication", Difficulty = "Intermediate", Route = "/labs/broken-auth" },
+        new() { Slug = "cors", Title = "CORS Misconfiguration", Difficulty = "Intermediate", Route = "/labs/cors" },
     ];
 
     public HomeController(ILogger<HomeController> logger)

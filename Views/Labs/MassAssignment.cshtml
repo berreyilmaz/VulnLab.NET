@@ -1,0 +1,133 @@
+@{
+    ViewData["Title"] = "Mass Assignment Lab";
+    var mode = ViewData["Mode"]?.ToString();
+    var username = ViewData["Username"]?.ToString() ?? "-";
+    var email = ViewData["Email"]?.ToString() ?? "-";
+    var isAdmin = ViewData["IsAdmin"];
+    var result = ViewData["Result"]?.ToString();
+}
+
+<section class="hero-panel">
+    <div class="d-flex flex-wrap justify-content-between gap-3 align-items-start">
+        <div>
+            <span class="eyebrow">LAB 13 - WEB SECURITY</span>
+            <h1 class="display-5 fw-bold mt-2 mb-3">Mass Assignment</h1>
+            <p class="lead mb-2">
+                Model binding tum alanlari bagladiginda istemci gizli alanlari (ornegin IsAdmin) manipule edebilir. DTO / BindExclude ile engelle.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="chip">Intermediate</span>
+                <span class="chip">Model Binding</span>
+                <span class="chip">Over-posting</span>
+            </div>
+        </div>
+        <a class="btn btn-outline-light" asp-controller="Home" asp-action="Index">Ana Sayfaya Don</a>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-8">
+            <article class="lab-card h-100">
+                <h2 class="h4 mb-3">Profil Guncelleme Demo</h2>
+                <p class="text-muted mb-3">
+                    Vulnerable formda gizli <code>IsAdmin</code> alani var. Secure formda bu alan bind edilmez.
+                    Burp ile Vulnerable istekte <code>IsAdmin=true</code> gondererek yetki yukseltmeyi dene.
+                </p>
+
+                <form class="row g-2" method="post" asp-controller="MassAssignmentLab" asp-action="Vulnerable">
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="Username" placeholder="Kullanici adi" />
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="email" name="Email" placeholder="E-posta" />
+                    </div>
+                    <input type="hidden" name="IsAdmin" value="false" />
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-primary" type="submit">Kaydet (Vulnerable)</button>
+                    </div>
+                </form>
+
+                <form class="row g-2 mt-2" method="post" asp-controller="MassAssignmentLab" asp-action="Secure">
+                    <div class="col-sm-4">
+                        <input class="form-control" type="text" name="Username" placeholder="Kullanici adi" />
+                    </div>
+                    <div class="col-sm-4">
+                        <input class="form-control" type="email" name="Email" placeholder="E-posta" />
+                    </div>
+                    <input type="hidden" name="IsAdmin" value="true" />
+                    <div class="col-sm-4 d-grid">
+                        <button class="btn btn-success" type="submit">Kaydet (Secure)</button>
+                    </div>
+                </form>
+
+                @if (!string.IsNullOrWhiteSpace(mode))
+                {
+                    <div class="mt-3 p-3 rounded-3 border border-warning">
+                        <p class="mb-1"><strong>Mod:</strong> @mode</p>
+                        <p class="mb-1"><strong>Username:</strong> <code>@username</code></p>
+                        <p class="mb-1"><strong>Email:</strong> <code>@email</code></p>
+                        <p class="mb-1"><strong>IsAdmin (sunucu):</strong> <code>@isAdmin</code></p>
+                        <p class="mb-0"><strong>Sonuc:</strong> @result</p>
+                    </div>
+                }
+
+                <div class="mt-3 p-3 rounded-3 border border-secondary-subtle">
+                    <strong class="d-block mb-2">Burp Ipuclari</strong>
+                    Vulnerable istekte hidden alani <code>IsAdmin=true</code> yap. Secure'da ayni payload etkisiz kalir.
+                </div>
+            </article>
+        </div>
+
+        <div class="col-lg-4">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Ogrenme Hedefleri</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Over-posting / mass assignment riskini gormek</li>
+                    <li>Gizli alan manipülasyonunu denemek</li>
+                    <li>Input DTO ile alan kisitlamak</li>
+                    <li>Yetki alanlarini sunucuda sabitlemek</li>
+                </ul>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Bu Hata Neden Olustu?</h2>
+                <ul class="mb-0 ps-3">
+                    <li>Entity dogrudan model olarak baglandi.</li>
+                    <li><code>IsAdmin</code> istemciden kabul edildi.</li>
+                    <li>Yetki alani istemci kontrolune birakti.</li>
+                </ul>
+            </article>
+        </div>
+        <div class="col-lg-6">
+            <article class="lab-card h-100">
+                <h2 class="h5 mb-3">Nasil Cozuldu?</h2>
+                <ol class="mb-0 ps-3">
+                    <li>Secure DTO'da yalnizca Username/Email var.</li>
+                    <li><code>IsAdmin</code> sunucu tarafinda sabit false.</li>
+                    <li>Istemci <code>IsAdmin=true</code> gonderse bile baglanmaz.</li>
+                </ol>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section class="mt-4">
+    <article class="lab-card">
+        <h2 class="h5 mb-3">Adim Adim Yol Haritasi</h2>
+        <div class="workflow-steps">
+            <article class="step-card"><span>01</span> Vulnerable formu gonder</article>
+            <article class="step-card"><span>02</span> Burp ile IsAdmin=true yap</article>
+            <article class="step-card"><span>03</span> Yetki yukselmesini gor</article>
+            <article class="step-card"><span>04</span> Secure DTO kullan</article>
+            <article class="step-card"><span>05</span> Ayni payload ile retest</article>
+            <article class="step-card"><span>06</span> BindExclude / allowlist not et</article>
+        </div>
+    </article>
+</section>

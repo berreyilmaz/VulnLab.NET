@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("VulnLab.NET")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65a9db8938a1c4f101f87b575128980bc78e0f07")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4b4d259bb32f86bfd95bfef9f74b835b4cc70f16")]
 [assembly: System.Reflection.AssemblyProductAttribute("VulnLab.NET")]
 [assembly: System.Reflection.AssemblyTitleAttribute("VulnLab.NET")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
